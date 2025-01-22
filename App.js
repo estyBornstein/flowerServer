@@ -19,4 +19,4 @@ app.use("/api/user",userRouter);
 app.use("/api/order",orderRouter);
 
 const port=process.env.PORT;
-app.listen(port,"localhost",()=>{console.log("app is listening on port "+port)})
+app.listen(port,()=>{console.log("app is listening on port "+port)})
