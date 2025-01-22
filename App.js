@@ -9,6 +9,7 @@ import userRouter from "./routes/user.js"
 
 dotenv.config();
 connectToDb();
+
 const app=express();
 
 app.use(express.json());
