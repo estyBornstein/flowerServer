@@ -1,5 +1,6 @@
 import { productModel } from "../models/product.js"
 import { userModel } from "../models/user.js"
+
 export async function getAllUsers(req, res) {
     try {
         let result = await userModel.find()
