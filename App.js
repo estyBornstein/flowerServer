@@ -10,13 +10,19 @@ import userRouter from "./routes/user.js"
 dotenv.config();
 connectToDb();
 
-const app=express();
+const app = express();
 
 app.use(express.json());
 app.use(cors());
-app.use("/api/product",productRouter);
-app.use("/api/user",userRouter);
-app.use("/api/order",orderRouter);
 
-const port=process.env.PORT;
-app.listen(port,()=>{console.log("app is listening on port "+port)})
+// הוספת השורה להגשת קבצים סטטיים מתיקיית public
+app.use(express.static('public'));
+
+app.use("/api/product", productRouter);
+app.use("/api/user", userRouter);
+app.use("/api/order", orderRouter);
+
+const port = process.env.PORT;
+
+app.listen(port, () => { console.log("app is listening on port " + port) })
+
