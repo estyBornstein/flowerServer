@@ -13,9 +13,11 @@ connectToDb();
 const app=express();
 
 app.use(express.json());
- app.use(cors());
+app.use(cors());
 
-  
+// הוספת השורה להגשת קבצים סטטיים מתיקיית public
+app.use(express.static('public'));
+
 app.use("/api/product",productRouter);
 app.use("/api/user",userRouter);
 app.use("/api/order",orderRouter);

@@ -1,4 +1,5 @@
 import { orderModel } from "../models/order.js"
+
 export async function getAllOrders(req, res) {
     try {
         let result = await orderModel.find()
@@ -11,13 +12,15 @@ export async function getAllOrders(req, res) {
         res.status(400).json({ title: "Failed to bring all the orders", message: err.message })
     }
 };
+
 export async function getOrderByUserId(req, res) {
     let { id } = req.params;
     try {
         let result = await orderModel.find({ customerCode: id })
         if (!result)
             return res.status(404).json({ title: "Problem with the user id", message: "we dont have orders for this id" })
-        res.json(result)
+       console.log(result.bouquet);
+            res.json(result)
     }
     catch (err) {
         res.status(400).json({ title: "Failed to bring  the orders by user id", message: err.message })
@@ -25,14 +28,15 @@ export async function getOrderByUserId(req, res) {
 };
 export async function addOrder(req, res) {
     let { body } = req;
-    if (body.totalPrice || body.sendPrice)
-        return res.status(404).json({ title: "There is a problem with the data.", message: "totalPrice,sendPrice Receives automatic value" })
-    if (!body.bouquet || !body.shipAddress || body.customerCode)
+    // if (body.totalPrice || body.sendPrice)
+    //     return res.status(404).json({ title: "There is a problem with the data.", message: "totalPrice,sendPrice Receives automatic value" })
+    if (!body.bouquet || !body.shipAddress || !body.customerCode)
         return res.status(404).json({ title: "missing data.", message: "bouquet, shipAddress, customerCode are required" })
     try {
         let newOrder = new orderModel(req.body)
         await newOrder.save()
-        res.json("the order added successfully", { newOrder })
+        console.log(newOrder.bouquet)
+        res.json({ message: "The order was added successfully", newOrder });
     }
     catch (err) {
         res.status(400).json({ title: "Failed to add the order", message: err.message })
