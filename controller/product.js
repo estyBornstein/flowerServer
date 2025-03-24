@@ -9,6 +9,7 @@ export async function getAllFlowers(req, res) {
     try {
         let result = await productModel.find().skip((page - 1) * limit).limit(limit)
         if (result.length == 0)
+
             res.json("no flowers")
         else
             res.json(result)
@@ -117,7 +118,6 @@ export async function updateFlower(req, res) {
     catch (err) {
         res.status(400).json({ title: "Failed to update the flower", message: err.message })
     }
-
 }
 
 

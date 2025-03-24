@@ -1,42 +1,12 @@
+
 import dotenv from 'dotenv'; // הוספתי את dotenv כדי להשתמש במשתנים סודיים כמו clientId ו-clientSecret
 import passport from 'passport';
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20'; // ייבוא הנכון של GoogleStrategy
-
 import { check } from "../middlewares/check.js"
 import { productModel } from "../models/product.js"
 import { userModel } from "../models/user.js"
 import { generateToken } from "../utils/jwt.js"
 import bcrypt from 'bcryptjs'
-
-
-// dotenv.config(); // הוספתי את קריאת dotenv להוראת המשתנים הסודיים
-
-// קביעת אסטרטגיית גוגל
-// passport.use(new GoogleStrategy({
-//     clientID: process.env.GOOGLE_CLIENT_ID, // הוספתי את מזהה הלקוח מגוגל
-//     clientSecret: process.env.GOOGLE_CLIENT_SECRET, // הוספתי את סוד הלקוח מגוגל
-//     callbackURL: "http://localhost:5090/auth/google/callback" // הוספתי את כתובת החזרה (callback URL) של הגוגל
-// }, async (accessToken, refreshToken, profile, done) => {
-//     try {
-//         // בדיקה אם יש משתמש כבר במערכת
-//         let existingUser = await userModel.findOne({ googleId: profile.id });
-//         if (existingUser) {
-//             return done(null, existingUser); // אם יש, מחזירים את המשתמש הקיים
-//         }
-
-//         // אם אין, ניצור משתמש חדש
-//         const newUser = new userModel({
-//             userName: profile.displayName,
-//             googleId: profile.id,
-//             email: profile.emails[0].value, // הוספתי את המייל של המשתמש
-//         });
-
-//         await newUser.save(); // שמירת המשתמש החדש
-//         done(null, newUser); // החזרת המשתמש החדש
-//     } catch (err) {
-//         done(err);
-//     }
-// }));
 
 export const loginGoogle = async (req, res) => {
 
@@ -81,24 +51,8 @@ export const signUpWithGoogle = async (req, res) => {
     }
 
 }
-// יצירת route לאתחול ההתחברות עם גוגל
-// export function googleLogin(req, res, next) {
-//     passport.authenticate('google', {
-//         scope: ['https://www.googleapis.com/auth/plus.login', 'https://www.googleapis.com/auth/userinfo.email']
-//     })(req, res, next);
-// };
 
-// יצירת route להחזרת המשתמש לאחר ההתחברות עם גוגל
-// export function googleCallback(req, res) {
-//     passport.authenticate('google', { failureRedirect: '/' }, (err, user) => {
-//         if (err) return res.status(500).json({ title: 'Authentication Failed', message: err.message });
 
-//         // יצירת טוקן למשתמש החדש או הקיים
-//         let token = generateToken(user);
-//         user.token = token;
-//         res.json(user); // החזרת המידע של המשתמש עם הטוקן
-//     })(req, res);
-// }
 
 export async function getAllUsers(req, res) {
     try {
@@ -129,18 +83,18 @@ export async function login(req, res) {
     let { userName, password } = req.body
     if (!userName || !password)
         return res.status(404).json({ title: "cannot login", message: "userName  password and email are required" })
-    
+
     try {
         let result = await userModel.findOne({ userName: userName })
         if (!result)
             return res.status(404).json({ title: "cannot login", message: "no user with such userName" })
-        
+
         // השוואת הסיסמה המוצפנת לסיסמה שהוזנה
         const isMatch = await bcrypt.compare(password, result.password);  // השוואת הסיסמה המוצפנת
 
         if (!isMatch)
             return res.status(404).json({ title: "cannot login", message: "wrong password" })
-        
+
         let token = generateToken(result);
 
         // הפיכת ה-Document לאובייקט רגיל והסרת הסיסמה
@@ -154,8 +108,6 @@ export async function login(req, res) {
         res.status(400).json({ title: "Failed to login", message: err.message })
     }
 }
-
-
 
 export async function addUser(req, res) {
     let { body } = req;
@@ -186,7 +138,6 @@ export async function addUser(req, res) {
         let { password, ...other } = newUser.toObject();  // הסרת הסיסמה לפני שליחה
         other.token = token;
         res.json(other)  // שליחת פרטי המשתמש עם הטוקן
-
     }
     catch (err) {
         res.status(400).json({ title: "Failed to add the user", message: err.message })
@@ -203,13 +154,13 @@ export async function updateUser(req, res) {
         if (!result)
             return res.status(404).json({ title: "cannot update by id", message: "no user with such id" })
         res.json(result)
+
     }
     catch (err) {
         res.status(400).json({ title: "Failed to update the user", message: err.message })
     }
 
 };
-
 
 export async function updatePassword(req, res) {
     let id = req.user.userId;
@@ -219,7 +170,7 @@ export async function updatePassword(req, res) {
         let user = await userModel.findById(id);
         if (!user)
             return res.status(404).json({ title: "cannot update the password", message: "no user with such id" });
-        
+
         // השוואת הסיסמה הישנה עם הסיסמה המוצפנת
         const isMatch = await bcrypt.compare(oldPassword, user.password);  // השוואת הסיסמה המוצפנת
         if (!isMatch)
@@ -239,6 +190,4 @@ export async function updatePassword(req, res) {
         res.status(400).json({ title: "Failed to update the password", message: err.message });
     }
 }
-
-
 

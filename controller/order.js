@@ -19,8 +19,8 @@ export async function getOrderByUserId(req, res) {
         let result = await orderModel.find({ customerCode: id })
         if (!result)
             return res.status(404).json({ title: "Problem with the user id", message: "we dont have orders for this id" })
-       console.log(result.bouquet);
-            res.json(result)
+        console.log(result.bouquet);
+        res.json(result)
     }
     catch (err) {
         res.status(400).json({ title: "Failed to bring  the orders by user id", message: err.message })
@@ -28,8 +28,7 @@ export async function getOrderByUserId(req, res) {
 };
 export async function addOrder(req, res) {
     let { body } = req;
-    // if (body.totalPrice || body.sendPrice)
-    //     return res.status(404).json({ title: "There is a problem with the data.", message: "totalPrice,sendPrice Receives automatic value" })
+
     if (!body.bouquet || !body.shipAddress || !body.customerCode)
         return res.status(404).json({ title: "missing data.", message: "bouquet, shipAddress, customerCode are required" })
     try {
@@ -42,6 +41,7 @@ export async function addOrder(req, res) {
         res.status(400).json({ title: "Failed to add the order", message: err.message })
     }
 };
+
 export async function deleteOrderById(req, res) {
     let { id } = req.params
     try {

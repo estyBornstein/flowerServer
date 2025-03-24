@@ -25,6 +25,7 @@ const userSchema = new Schema({
     default: new Date(), // תאריך יצירה אוטומטי
   },
 });
+
 // יצירת מודל וייצואו
 export const userModel = model("user", userSchema);
 

@@ -11,4 +11,5 @@ router.get("/:id",getFlowerById);
 router.delete("/:id",check,deleteFlowerById);//לא קיים מחיקת פרח בפועל זה רק עדכון של שדה
 router.post("/",check,uploadImage,addFlower);
 router.put("/:id",check,uploadImage,updateFlower);
+
 export default router;

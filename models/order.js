@@ -6,7 +6,6 @@ const smallFlowerScema = Schema({
     color: String
 })
 const orderSchema = Schema({
-    // _id:Types.ObjectId,
     orderDate: { type: Date, default: new Date() },
     deadline: {
         type: Date, default: () => {
