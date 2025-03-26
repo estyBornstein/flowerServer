@@ -112,7 +112,7 @@ export async function login(req, res) {
 export async function addUser(req, res) {
     let { body } = req;
     if (!body.userName || !body.password || !body.email)
-        return res.status(404).json({ title: "missing data in body", message: "userName and password are required" })
+        return res.status(404).json({ title: "missing data in body", message: "userName email and password are required" })
 
     try {
         let result = await userModel.findOne({ userName: body.userName });
