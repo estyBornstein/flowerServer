@@ -3,7 +3,7 @@ import mongoose, { Schema, model, Types } from "mongoose";
 const smallFlowerScema = Schema({
     _id: { required: true, type: Types.ObjectId },
     name: String,
-    color: [String]
+    color: String
 })
 const orderSchema = Schema({
     orderDate: { type: Date, default: new Date() },

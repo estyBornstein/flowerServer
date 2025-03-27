@@ -1,5 +1,6 @@
 import { orderModel } from "../models/order.js"
 
+
 export async function getAllOrders(req, res) {
     try {
         let result = await orderModel.find()

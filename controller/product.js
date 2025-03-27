@@ -1,6 +1,8 @@
 import mongoose from "mongoose"
+
 import { productModel } from "../models/product.js"
 import { productValidation } from "../validations/productValidation.js";
+
 
 export async function getAllFlowers(req, res) {
 

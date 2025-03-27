@@ -1,12 +1,14 @@
 
 import dotenv from 'dotenv'; // הוספתי את dotenv כדי להשתמש במשתנים סודיים כמו clientId ו-clientSecret
 import passport from 'passport';
+import bcrypt from 'bcryptjs'
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20'; // ייבוא הנכון של GoogleStrategy
+
 import { check } from "../middlewares/check.js"
 import { productModel } from "../models/product.js"
 import { userModel } from "../models/user.js"
 import { generateToken } from "../utils/jwt.js"
-import bcrypt from 'bcryptjs'
+
 
 export const loginGoogle = async (req, res) => {
 
